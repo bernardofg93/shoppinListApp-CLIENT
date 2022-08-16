@@ -2,7 +2,7 @@ import { useFormik } from "formik";
 import React, { useState } from "react";
 import Layout from "../components/Layout";
 import * as Yup from "yup";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
@@ -15,12 +15,11 @@ const AUTENTICATE_USER = gql`
 `;
 
 const Login = () => {
+  //routing
+  const router = useRouter();
   const [mensaje, guardarMensaje] = useState(null);
   //mutatitions para crear nuevos usuarios
   const [authenticateUser] = useMutation(AUTENTICATE_USER);
-
-  //routing
-  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {

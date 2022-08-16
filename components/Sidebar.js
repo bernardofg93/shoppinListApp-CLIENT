@@ -1,25 +1,24 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
-
-const GET_USER = gql`
-  query GetUser {
-    getUser {
-      id
-    }
-  }
-`;
+import Avatar from "./Avatar";
 
 const Sidebar = () => {
   // routing
   const router = useRouter();
 
-  const { data, loading, error } = useQuery(GET_USER);
+  const userId = () => {
+    if (typeof window !== "undefined") {
+      const userData = localStorage.getItem("userData");
+      if (userData) {
+        const json = JSON.parse(userData);
+        const { id } = json;
+        return id;
+      }
+    }
+  };
 
-  if (loading) return "Cargando...";
-
-  const { id } = data.getUser;
+  const id = userId();
 
   const editMyData = (id) => {
     Router.push({
@@ -28,10 +27,18 @@ const Sidebar = () => {
     });
   };
 
+  const myShoppingList = (id) => {
+    Router.push({
+      pathname: "/miscompras/[id]",
+      query: { id },
+    });
+  }
+
   return (
     <aside className="bg-sky-900 sm:w-1/3 xl:w-1/5 sm:min-h-screen p-5 shadow-lg">
-      <div>
-        <p className="text-white text-2xl font-black">App</p>
+      <div className="w-full flex justify-center">
+        {/* <p className="text-white text-2xl font-black">App</p> */}
+        <Avatar />
       </div>
 
       <nav className="mt-5 list-none">
@@ -49,6 +56,13 @@ const Sidebar = () => {
         >
           <button onClick={() => editMyData(id)}>
             <a className="text-white mb-3 block font-medium ">Mis datos</a>
+          </button>
+        </li>
+        <li
+          className={router.pathname === "/pedidos" ? "bg-sky-800 p-2" : "p-2"}
+        >
+          <button onClick={() => myShoppingList(id)}>
+            <a className="text-white mb-3 block font-medium ">Mis compras</a>
           </button>
         </li>
       </nav>

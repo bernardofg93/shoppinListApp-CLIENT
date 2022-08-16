@@ -6,14 +6,14 @@ import Layout from "../../components/Layout";
 import * as Yup from "yup";
 
 const GET_USER = gql`
-  query GetUser {
-    getUser {
+  query GetUserId($getUserIdId: ID!) {
+    getUserId(id: $getUserIdId) {
       name
-      email
       address
       city
       country
       phone
+      email
     }
   }
 `;
@@ -33,21 +33,26 @@ const UPDATE_DATA = gql`
 
 const editarMisDatos = () => {
   const router = useRouter();
+
   const {
     query: { pid },
   } = router;
 
   const id = pid;
 
+  console.log(id);
+
   const { data, loading, error } = useQuery(GET_USER, {
     variables: {
-      pid,
+      getUserIdId: pid,
     },
   });
 
-
-  //actualizar
   const [updateUser] = useMutation(UPDATE_DATA);
+
+  if (loading) return "Cargando...";
+
+  const { getUserId } = data;
 
   // validate
   const validationSchema = Yup.object({
@@ -60,15 +65,6 @@ const editarMisDatos = () => {
     country: Yup.string().required("El país es obligatorio"),
     city: Yup.string().required("La ciudad es obligatoria"),
   });
-
-  if (loading) return "Cargando...";
-
-  const { getUser } = data;
-
-  if(!data) {
-    return Router.push('/');
-}
-
 
   // ubdate data in to db
   const updataData = async (values) => {
@@ -91,7 +87,7 @@ const editarMisDatos = () => {
 
       console.log(data);
       // Alert
-      
+
       // redirec
       router.push("/");
     } catch (error) {
@@ -109,7 +105,7 @@ const editarMisDatos = () => {
           <Formik
             validationSchema={validationSchema}
             enableReinitialize
-            initialValues={getUser}
+            initialValues={getUserId}
             onSubmit={(values) => {
               updataData(values);
             }}

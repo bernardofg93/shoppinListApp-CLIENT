@@ -28,15 +28,43 @@ const NEW_PURCHASE = gql`
   }
 `;
 
+const GET_PURCHASE = gql`
+  query GetPurchaseUser($getPurchaseUserId: ID!) {
+    getPurchaseUser(id: $getPurchaseUserId) {
+      id
+      user {
+        id
+        name
+      }
+      purchase {
+        id
+        name
+        description
+        price
+      }
+    }
+  }
+`;
+
 const CreatePurchase = () => {
   // state para el mensaje
   const [mensaje, guardarMensaje] = useState(null);
   const [products, setProduts] = useState([]);
-  const [refresh, setRefresh] = useState(false);
 
   // Mutation para crear nuevos usuarios
   const [newProduct] = useMutation(NEW_PRODUCT);
   const [newPurchase] = useMutation(NEW_PURCHASE);
+  // const [newPurchase] = useMutation(NEW_PURCHASE, {
+  //   update(cache, { data: { newPurchase } }) {
+  //     const { getPurchaseUser } = cache.readQuery({ query: GET_PURCHASE });
+  //     cache.writeQuery({
+  //       query: GET_PURCHASE,
+  //       data: {
+  //         getPurchaseUser: [...getPurchaseUser, newPurchase],
+  //       },
+  //     });
+  //   },
+  // });
 
   //routing
   const router = useRouter();
@@ -54,8 +82,6 @@ const CreatePurchase = () => {
       price: Yup.number().required("El precio es obligatorio"),
     }),
     onSubmit: async (values) => {
-      //   console.log("enviando");
-      //   console.log(valores);
       const { name, description, price } = values;
 
       try {
@@ -72,15 +98,6 @@ const CreatePurchase = () => {
         const prod = data.newProduct;
 
         setProduts([...products, prod]);
-
-        //usuario creado correctamente
-        // guardarMensaje(
-        //   `Se creo correctamente el Usuario: ${data.newProduct.name}`
-        // );
-        // setTimeout(() => {
-        //   guardarMensaje(null);
-        //   router.push("/");
-        // }, 3000);
       } catch (error) {
         guardarMensaje(error.message.replace("GraphQL error", ""));
 
@@ -92,19 +109,19 @@ const CreatePurchase = () => {
     },
   });
 
-  console.log("mis productos", products);
-
   const generatePurchase = async () => {
     // delete items array
     const purchase = products.map(({ __typename, ...products }) => products);
     // get id user
-    const user = localStorage.getItem("userId");
+    const userData = localStorage.getItem("userData");
+    const json = JSON.parse(userData);
+    const { id } = json;
     try {
       const { data } = await newPurchase({
         variables: {
           input: {
             purchase,
-            user,
+            user:id,
           },
         },
       });
