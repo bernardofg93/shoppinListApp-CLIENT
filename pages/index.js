@@ -59,14 +59,16 @@ const Index = () => {
 
   if (loading) return "cargando ...";
 
-
   const createOrder = () => {
     Router.push("/crearcompra");
   };
 
   return (
     <div>
-      <Layout>
+      <Layout
+        hola="hola"
+      >
+       
         <div className="flex justify-between">
           <h2 className="text-2xl text-gray-900 font-light">Mis compras</h2>
           <button

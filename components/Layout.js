@@ -14,7 +14,8 @@ const GET_USER = gql`
   }
 `;
 
-const Layout = ({ children }) => {
+const Layout = ({ children, hola }) => {
+  console.log(hola);
   const [id, setId] = useState(null);
 
   useEffect(() => {
