@@ -15,8 +15,7 @@ module.exports = {
         "jsx": true
     },
     "plugins": [
-        "react",
-        "javascriptreact"
+        "react"
     ],
     "rules": {
         "react/no-unescaped-entities": "off",
