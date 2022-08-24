@@ -1,38 +1,16 @@
-import React from "react";
+import React, {useContext} from "react";
 import Link from "next/link";
 import Router, { useRouter } from "next/router";
 import Avatar from "./Avatar";
+import PurchaseContext from "../context/PurchaseContext";
 
 const Sidebar = () => {
-  // routing
+
+  const purchaseContext = useContext(PurchaseContext);
+
+  const { user } = purchaseContext;
+  
   const router = useRouter();
-
-  const userId = () => {
-    if (typeof window !== "undefined") {
-      const userData = localStorage.getItem("userData");
-      if (userData) {
-        const json = JSON.parse(userData);
-        const { id } = json;
-        return id;
-      }
-    }
-  };
-
-  const id = userId();
-
-  const editMyData = (id) => {
-    Router.push({
-      pathname: "/editarmisdatos/[id]",
-      query: { id },
-    });
-  };
-
-  const myShoppingList = (id) => {
-    Router.push({
-      pathname: "/miscompras/[id]",
-      query: { id },
-    });
-  }
 
   return (
     <aside className="bg-sky-900 sm:w-1/3 xl:w-1/5 sm:min-h-screen p-5 shadow-lg">
@@ -48,22 +26,32 @@ const Sidebar = () => {
           }
         >
           <Link href="/">
-            <a className="text-white font-medium mb-3 block">Pedidos</a>
+            <a className="text-white font-medium mb-3 block">Nueva compra</a>
           </Link>
         </li>
         <li
           className={router.pathname === "/pedidos" ? "bg-sky-800 p-2" : "p-2"}
         >
-          <button onClick={() => editMyData(id)}>
+          <Link
+            href={{
+              pathname: "/misdatos",
+              query: { id: user?.id },
+            }}
+          >
             <a className="text-white mb-3 block font-medium ">Mis datos</a>
-          </button>
+          </Link>
         </li>
         <li
           className={router.pathname === "/pedidos" ? "bg-sky-800 p-2" : "p-2"}
         >
-          <button onClick={() => myShoppingList(id)}>
+          <Link
+            href={{
+              pathname: "/miscompras",
+              query: { id: user?.id },
+            }}
+          >
             <a className="text-white mb-3 block font-medium ">Mis compras</a>
-          </button>
+          </Link>
         </li>
       </nav>
     </aside>

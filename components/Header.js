@@ -1,34 +1,26 @@
 import { useRouter } from "next/router";
-import React, { useState, useEffect, useReducer } from "react";
-import Avatar from "./Avatar";
+import React, { useContext } from "react";
+import client from "../config/apollo";
+import PurchaseContext from "../context/PurchaseContext";
 
 const Header = () => {
+  const purchaseContext = useContext(PurchaseContext);
+
+  const { user } = purchaseContext;
 
   const router = useRouter();
 
-  const userName = () => {
-    if (typeof window !== "undefined") {
-      const userData = localStorage.getItem("userData");
-      if (userData) {
-        const json = JSON.parse(userData);
-        const { name } = json;
-        return name
-      }
-    }
-  }
-
-  const name = userName();
-
   const logOut = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userData");
-    localStorage.removeItem("idUser");
     router.push("/login");
+    client.clearStore();
   };
 
   return (
     <div className="flex justify-between mb-6 bg-sky-800 p-5 shadow-md">
-      {userName() && <p className="mr-2 text-white font-bold">Hola: {name}</p>}
+      {user?.name && (
+        <p className="mr-2 text-white font-bold">Hola: {user.name}</p>
+      )}
       <button
         className="bg-rose-600 w-full sm:w-auto font-bold 
             uppercase text-xs rounded py-2 px-2 text-white shadow-md"

@@ -1,9 +1,20 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useContext } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useDropzone } from "react-dropzone";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { ToastContainer, toast } from "react-toastify";
+import PurchaseContext from "../context/PurchaseContext";
+
+const GET_USER = gql`
+  query GetUser {
+    getUser {
+      id
+      name
+      avatar
+    }
+  }
+`;
 
 const UPDATE_IMAGE = gql`
   mutation UpdateAvatar($file: Upload!) {
@@ -18,7 +29,26 @@ function classNames(...classes) {
 }
 
 const Avatar = () => {
-  const [updateAvatar] = useMutation(UPDATE_IMAGE);
+  const purchaseContext = useContext(PurchaseContext);
+
+  const { user } = purchaseContext;
+
+  const [updateAvatar] = useMutation(UPDATE_IMAGE, {
+    update(cache, { data: { updateAvatar } }) {
+      console.log("updateavatar", updateAvatar.urlAvatar);
+      const { getUser } = cache.readQuery({
+        query: GET_USER,
+      });
+      console.log("getUser", getUser.avatar);
+      cache.writeQuery({
+        query: GET_USER,
+        data: {
+          getUser: { ...getUser, avatar: updateAvatar.urlAvatar },
+        },
+      });
+    },
+  });
+
   const [loading, setLoading] = useState(false);
 
   const onDrop = useCallback(async (acceptedFile) => {
@@ -26,7 +56,7 @@ const Avatar = () => {
 
     try {
       setLoading(true);
-      console.log("file", file);
+      // console.log("file", file);
       const result = await updateAvatar({
         variables: {
           file,
@@ -35,8 +65,8 @@ const Avatar = () => {
 
       const { data } = result;
 
-      if (!data.updateAvatar.state) {
-        toast("🦄 Wow so easy!", {
+      if (!data.updateAvatar.status) {
+        toast("Hubo un error al subir la imagen!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -45,8 +75,8 @@ const Avatar = () => {
           draggable: true,
           progress: undefined,
         });
-        setLoading(false)
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -75,11 +105,7 @@ const Avatar = () => {
       <div>
         <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
           <span className="sr-only">Open user menu</span>
-          <img
-            className="h-20 w-20 rounded-full"
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-            alt=""
-          />
+          <img className="h-20 w-20 rounded-full" src={user?.avatar} alt="" />
         </Menu.Button>
         {loading && "Cargando"}
       </div>

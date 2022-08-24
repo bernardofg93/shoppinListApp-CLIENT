@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 
 const httpLink = createUploadLink({
     uri: 'http://localhost:4000/graphql',
-    // uri: 'https://ber-instancione-app.herokuapp.com/',
+    // uri: 'https://expressjs-mongoose-production-d87c.up.railway.app/graphql',
     fetch
 });
 
