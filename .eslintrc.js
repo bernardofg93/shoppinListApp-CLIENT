@@ -10,6 +10,7 @@ module.exports = {
   ],
   overrides: [],
   parserOptions: {
+    sourceType: "module",
     ecmaFeatures: {
       jsx: true,
     },
