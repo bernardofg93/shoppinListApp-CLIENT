@@ -23,6 +23,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^12.2.5",
     "autoprefixer": "^10.4.8",
     "eslint": "^8.22.0",
     "eslint-plugin-react": "^7.30.1",
