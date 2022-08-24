@@ -4,8 +4,8 @@ import { setContext } from "apollo-link-context";
 import fetch from "node-fetch";
 
 const httpLink = createUploadLink({
-    uri: 'http://localhost:4000/graphql',
-    // uri: 'https://expressjs-mongoose-production-d87c.up.railway.app/graphql',
+    // uri: 'http://localhost:4000/graphql',
+    uri: 'https://expressjs-mongoose-production-d87c.up.railway.app/graphql',
     fetch
 });
 
