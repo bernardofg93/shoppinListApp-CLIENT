@@ -4,7 +4,9 @@ module.exports = {
         "es2021": true
     },
     "extends": [
-        "next",
+        "eslint:recommended",
+        "plugin:react/recommended",
+        'plugin:@next/next/recommended',
     ],
     "overrides": [
     ],
@@ -13,6 +15,7 @@ module.exports = {
         "jsx": true
     },
     "plugins": [
+        "react",
         "javascriptreact"
     ],
     "rules": {
