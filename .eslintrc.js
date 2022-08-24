@@ -17,6 +17,7 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
+    "strict": 0,
     "react/no-unescaped-entities": "off",
     "@next/next/no-page-custom-font": "off",
     "react/jsx-uses-react": "error",
