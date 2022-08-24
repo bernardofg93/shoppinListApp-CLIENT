@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { ToastContainer, toast } from "react-toastify";
 import PurchaseContext from "../context/PurchaseContext";
+import Image from "next/image";
 
 const GET_USER = gql`
   query GetUser {
@@ -105,7 +106,7 @@ const Avatar = () => {
       <div>
         <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
           <span className="sr-only">Open user menu</span>
-          <img className="h-20 w-20 rounded-full" src={user?.avatar} alt="" />
+          <Image className="h-20 w-20 rounded-full" src={user?.avatar} alt="" />
         </Menu.Button>
         {loading && "Cargando"}
       </div>

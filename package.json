@@ -3,10 +3,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
+  "extends": "next/core-web-vitals",
   "dependencies": {
     "@apollo/client": "^3.6.9",
+    "@babel/core": "^7.18.13",
+    "@babel/preset-react": "^7.18.6",
     "@headlessui/react": "^1.6.6",
     "@heroicons/react": "^1.0.6",
     "apollo-link-context": "^1.0.20",
@@ -23,12 +27,17 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.18.9",
     "@next/eslint-plugin-next": "^12.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.34.0",
+    "@typescript-eslint/parser": "^5.34.0",
     "@vercel/node": "^2.5.10",
     "autoprefixer": "^10.4.8",
+    "babel-eslint": "^10.1.0",
     "eslint": "^8.22.0",
     "eslint-plugin-react": "^7.30.1",
     "postcss": "^8.4.16",
-    "tailwindcss": "^3.1.8"
+    "tailwindcss": "^3.1.8",
+    "typescript": "^4.7.4"
   }
 }
